@@ -12,7 +12,8 @@ impl Display for QuantumNumber {
 }
 
 fn main() {
-    println!("CÁLCULO DE POSIBLES NÚMEROS CUÁNTICOS");
+    println!("CÁLCULO DE POSIBLES NÚMEROS CUÁNTICOS DE UN ELECTRÓN");
+    println!();
 
     // <- Energy level (n)
     let energy_level = loop {
@@ -26,8 +27,11 @@ fn main() {
             .expect("Hubo un error al leer el número");
 
         // Convert entered energy level to a valid number
+        println!();
+        println!("PROCEDIMIENTO");
         match entered_energy_level.trim().parse::<i32>() {
             Ok(number) => {
+                println!("n = {}", number);
                 break number;
             }
             Err(_) => println!(
@@ -40,6 +44,7 @@ fn main() {
 
     // <- l
     let azimuth_number = energy_level - 1;
+    println!("l = n - 1 = {} - 1 = {}", energy_level, azimuth_number);
     // -> l
 
     // <- ml
@@ -47,10 +52,12 @@ fn main() {
         Equal => vec![0],
         _ => ((-1 * azimuth_number)..=(1 * azimuth_number)).collect(),
     };
+    println!("ml = [-l, 0, l] = {:?}", magnetic_numbers);
     // ->
 
     // <- s
-    let spin_numbers = vec!["1/2", "-1/2"];
+    let spin_numbers = vec!["+1/2", "-1/2"];
+    println!("s = {:?}", spin_numbers);
     // ->
 
     let mut quantum_numbers: Vec<QuantumNumber> = Vec::new();
@@ -66,15 +73,20 @@ fn main() {
     }
 
     println!();
+    println!("RESULTADOS");
     let mut counter: u8 = 0;
     for quantum_number in quantum_numbers.into_iter() {
         match counter {
-            0 => println!(">{}", quantum_number),
-            1 => println!(" {}", quantum_number),
-            _ => {
+            0 => {
+                println!("> {}", quantum_number);
+                counter += 1;
+            }
+            1 => {
+                println!("  {}", quantum_number);
                 println!();
                 counter = 0;
             }
+            _ => (),
         }
     }
 }

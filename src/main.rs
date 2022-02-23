@@ -1,3 +1,4 @@
+use colored::Colorize;
 use std::cmp::Ordering::Equal;
 use std::io::{self, Write};
 
@@ -5,6 +6,8 @@ struct QuantumNumber(i32, i32, i32, String);
 
 fn main() {
     println!("CÁLCULO DE POSIBLES NÚMEROS CUÁNTICOS");
+
+    // <- Energy level (n)
     let n = loop {
         print!("Nivel de energía: ");
         io::stdout().flush().unwrap();
@@ -20,22 +23,29 @@ fn main() {
             Ok(number) => {
                 break number;
             }
-            Err(_) => (),
+            Err(_) => println!(
+                "{}",
+                "El número cuántico debe ser un número. Inténtalo de nuevo.\n".red()
+            ),
         }
     };
+    // ->
 
+    // <- l
     let l = n - 1;
+    // -> l
 
+    // <- ml
     let ml = match n.cmp(&0) {
         Equal => vec![0],
         _ => ((-1 * l)..=(1 * l)).collect(),
     };
+    // ->
 
-    #[allow(unused_variables)]
+    // <- s
     let s = vec!["1/2", "-1/2"];
+    // ->
 
-    #[allow(unused_variables)]
-    #[allow(unused_mut)]
     let mut quantum_numbers: Vec<QuantumNumber> = Vec::new();
 
     for element in ml.into_iter() {

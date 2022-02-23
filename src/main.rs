@@ -1,14 +1,21 @@
 use colored::Colorize;
 use std::cmp::Ordering::Equal;
+use std::fmt::{self, Display, Formatter};
 use std::io::{self, Write};
 
 struct QuantumNumber(i32, i32, i32, String);
+
+impl Display for QuantumNumber {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(f, "({}, {}, {}, {})", self.0, self.1, self.2, self.3)
+    }
+}
 
 fn main() {
     println!("CÁLCULO DE POSIBLES NÚMEROS CUÁNTICOS");
 
     // <- Energy level (n)
-    let n = loop {
+    let energy_level = loop {
         print!("Nivel de energía: ");
         io::stdout().flush().unwrap();
 
@@ -32,23 +39,42 @@ fn main() {
     // ->
 
     // <- l
-    let l = n - 1;
+    let azimuth_number = energy_level - 1;
     // -> l
 
     // <- ml
-    let ml = match n.cmp(&0) {
+    let magnetic_numbers = match energy_level.cmp(&0) {
         Equal => vec![0],
-        _ => ((-1 * l)..=(1 * l)).collect(),
+        _ => ((-1 * azimuth_number)..=(1 * azimuth_number)).collect(),
     };
     // ->
 
     // <- s
-    let s = vec!["1/2", "-1/2"];
+    let spin_numbers = vec!["1/2", "-1/2"];
     // ->
 
     let mut quantum_numbers: Vec<QuantumNumber> = Vec::new();
+    for magnetic_number in magnetic_numbers.into_iter() {
+        for spin_number in spin_numbers.iter() {
+            quantum_numbers.push(QuantumNumber(
+                energy_level,
+                azimuth_number,
+                magnetic_number,
+                String::from(*spin_number),
+            ))
+        }
+    }
 
-    for element in ml.into_iter() {
-        println!("{}", element);
+    println!();
+    let mut counter: u8 = 0;
+    for quantum_number in quantum_numbers.into_iter() {
+        match counter {
+            0 => println!(">{}", quantum_number),
+            1 => println!(" {}", quantum_number),
+            _ => {
+                println!();
+                counter = 0;
+            }
+        }
     }
 }

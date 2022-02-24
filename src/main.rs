@@ -74,19 +74,18 @@ fn main() {
 
     println!();
     println!("RESULTADOS");
-    let mut counter: u8 = 0;
+    let mut does_have_to_change_spin_number = false;
     for quantum_number in quantum_numbers.into_iter() {
-        match counter {
-            0 => {
+        match does_have_to_change_spin_number {
+            false => {
                 println!("> {}", quantum_number);
-                counter += 1;
+                does_have_to_change_spin_number = true;
             }
-            1 => {
+            true => {
                 println!("  {}", quantum_number);
                 println!();
-                counter = 0;
+                does_have_to_change_spin_number = false;
             }
-            _ => (),
         }
     }
 }
